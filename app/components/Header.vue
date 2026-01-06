@@ -27,4 +27,9 @@
 
 <script setup lang="ts"></script>
 
+<<<<<<< HEAD
 <style scoped></style>
+=======
+<style scoped>
+</style>
+>>>>>>> 7653c635db094adc083f18b031b129cbc0481c16
