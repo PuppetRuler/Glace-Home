@@ -45,7 +45,6 @@ body {
 
 /* 深色模式：切换 RGB 数值 */
 .dark .vignette-overlay {
-  /* 对应你提到的图二数值：20, 20, 20 */
   --bg-gradient-home: 20, 20, 20;
 }
 @media (prefers-reduced-motion: reduce) {
