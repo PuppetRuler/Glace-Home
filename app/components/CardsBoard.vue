@@ -1,12 +1,12 @@
 <template>
   <div class="grid grid-cols-1 grid-rows-5 w-full h-full">
-    <div class="row-span-1">
+    <div class="row-span-1 hidden sm:block">
       <UCard
         :ui="{
           root: 'bg-background/50 backdrop-blur-sm min-h-5 transition-all ring-0',
           body: 'w-full h-full sm:py-2',
         }"
-        class="rounded-full dark:shadow-[inset_0_2px_2px_0_rgba(255,255,255,0.1)] shadow-[inset_0_2px_2px_0_rgba(0,0,0,0.1)] h-1/2 w-full flex items-center border-b border-black"
+        class="rounded-full dark:shadow-[inset_0_2px_2px_0_rgba(255,255,255,0.1)] shadow-[inset_0_2px_2px_0_rgba(0,0,0,0.1)] h-1/2 w-full flex items-center border-b border-black mt-8"
       >
         <div class="flex w-full h-full items-center">
           <div

@@ -1,18 +1,22 @@
 <template>
-  <div class="w-full max-w-6xl mx-auto p-8">
+  <div class="w-full max-w-6xl mx-auto sm:p-8">
     <div class="flex items-center space-x-2 text-white/90 mb-6 px-4">
       <UIcon name="i-heroicons-link" class="w-6 h-6 rotate-45" />
       <h2 class="text-xl font-medium tracking-wider">网站列表</h2>
     </div>
 
-    <div 
+    <div
       ref="scrollContainer"
       class="flex overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar"
       @scroll="handleScroll"
     >
-      <div class="min-w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 snap-center pb-8">
+      <div
+        v-for="(page, pIndex) in pages"
+        :key="pIndex"
+        class="min-w-full grid grid-cols-2 grid-rows-2 sm:grid-rows-none sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 snap-center pb-8"
+      >
         <div
-          v-for="item in page1"
+          v-for="item in page"
           :key="item.name"
           class="relative"
         >
@@ -46,32 +50,15 @@
           </div>
         </div>
       </div>
-
-      <div class="min-w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 snap-center pb-8">
-        <div
-          v-for="item in page2"
-          :key="item.name"
-          class="relative"
-        >
-          <div class="card-unavailable group relative h-32 cursor-not-allowed transition-all duration-500 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl flex flex-col items-center justify-center gap-2 hover:scale-105 text-center">
-            <UIcon :name="item.icon" class="w-10 h-10 text-white/50" />
-            <span class="text-xl font-normal text-white/50 tracking-widest">{{ item.name }}</span>
-            <div class="card-badge absolute top-3 right-3 text-xs rounded-full px-2 py-0.5 bg-white/10 text-white/80 opacity-0 transition-opacity duration-200 pointer-events-none">暂不可用</div>
-          </div>
-        </div>
-      </div>
     </div>
 
     <div class="flex justify-center items-center space-x-3 pt-4">
-      <button 
-        @click="scrollToPage(0)"
+      <button
+        v-for="( _, idx) in pages"
+        :key="idx"
+        @click="() => scrollToPage(idx)"
         class="h-1.5 rounded-full transition-all duration-300"
-        :class="activeIndex === 0 ? 'w-8 bg-white' : 'w-4 bg-white/20'"
-      ></button>
-      <button 
-        @click="scrollToPage(1)"
-        class="h-1.5 rounded-full transition-all duration-300"
-        :class="activeIndex === 1 ? 'w-8 bg-white' : 'w-4 bg-white/20'"
+        :class="activeIndex === idx ? 'w-8 bg-white' : 'w-4 bg-white/20'"
       ></button>
     </div>
   </div>
@@ -98,6 +85,39 @@ const page2 = [
   { name: '反馈', icon: 'i-heroicons-chat-bubble-left-right' }
 ]
 
+// Responsive paging: on mobile (<sm) we want pages that contain 2x2 cards (4 items per page).
+const pages = ref<Array<Array<{ name: string; icon: string }>>>([])
+
+const isMobile = ref(typeof window !== 'undefined' ? window.matchMedia('(max-width: 639px)').matches : false)
+
+const chunkArray = <T,>(arr: T[], size: number) => {
+  const out: T[][] = []
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size))
+  return out
+}
+
+const buildPages = () => {
+  if (isMobile.value) {
+    // split each original page into chunks of 4 so every slide is 2x2
+    pages.value = [...chunkArray(page1, 4), ...chunkArray(page2, 4)]
+  } else {
+    // desktop / larger screens: preserve original two pages
+    pages.value = [page1, page2]
+  }
+}
+
+// listen to resize to rebuild pages when crossing the sm breakpoint
+const onResize = () => {
+  const prev = isMobile.value
+  isMobile.value = window.matchMedia('(max-width: 639px)').matches
+  if (prev !== isMobile.value) buildPages()
+}
+
+// initialize
+if (typeof window !== 'undefined') {
+  buildPages()
+}
+
 // 处理滚动监听，更新指示器状态
 const handleScroll = (event: Event) => {
   const el = event.target as HTMLElement
@@ -117,7 +137,7 @@ let startX = 0
 let startScrollLeft = 0
 let lastSamples: Array<{ x: number; t: number }> = []
 
-const pageCount = 2 // 当前只有两页，若扩展请动态计算
+// pageCount is dynamic now; pages.length used for indicators
 
 const onPointerDown = (e: PointerEvent) => {
   if (!scrollContainer.value) return
@@ -182,6 +202,8 @@ onMounted(() => {
   el.addEventListener('pointerup', endDrag)
   el.addEventListener('pointercancel', endDrag)
   el.addEventListener('mouseleave', onMouseLeave)
+  // resize listener to rebuild pages when crossing sm breakpoint
+  window.addEventListener('resize', onResize)
 })
 
 onUnmounted(() => {
@@ -192,6 +214,7 @@ onUnmounted(() => {
   el.removeEventListener('pointerup', endDrag)
   el.removeEventListener('pointercancel', endDrag)
   el.removeEventListener('mouseleave', onMouseLeave)
+  window.removeEventListener('resize', onResize)
 })
 </script>
 
