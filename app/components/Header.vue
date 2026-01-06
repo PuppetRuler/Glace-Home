@@ -1,9 +1,10 @@
 <template>
   <UHeader
-    class="header rounded-full my-2 dark:shadow-[inset_0_2px_2px_0_rgba(255,255,255,0.1)] shadow-[inset_0_2px_2px_0_rgba(0,0,0,0.1)]"
+    class="rounded-full dark:shadow-[inset_0_2px_2px_0_rgba(255,255,255,0.1)] shadow-[inset_0_2px_2px_0_rgba(0,0,0,0.1)]"
   >
     <template #left>
       <Logo class="h-[80] w-auto" />
+      <h1 class="text-base font-bold">Glace's Home</h1>
     </template>
     <template #right>
       <UButton
@@ -23,7 +24,4 @@
 <script setup lang="ts"></script>
 
 <style scoped>
-.header {
-  width: 80%;
-}
 </style>
