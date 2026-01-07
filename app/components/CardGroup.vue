@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full max-w-6xl mx-auto sm:p-8">
+  <div class="w-full max-w-6xl mx-auto pt-8">
     <div class="flex items-center space-x-2 text-white/90 mb-6 px-4">
       <UIcon name="i-heroicons-link" class="w-6 h-6 rotate-45" />
       <h2 class="text-xl font-medium tracking-wider">网站列表</h2>
