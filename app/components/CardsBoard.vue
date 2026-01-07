@@ -18,7 +18,7 @@
               class="h-[2em] w-[2em] col-span-1 -translate-x-2.5"
             />
             <!-- 时间 -->
-            <div class="col-span-3 flex justify-center">
+            <div class="col-span-3 flex justify-center ml-2">
               <span
                 class="font-['Inter'] text-xl font-medium tracking-tight"
               >
