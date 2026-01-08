@@ -35,13 +35,31 @@
       </div>
     </div>
 
-    <div
-      class="flex-1 w-full flex gap-3 justify-center items-center border-t border-white/5"
-    >
-      <UButton icon="i-simple-icons-github" variant="ghost" color="neutral" />
-      <UButton icon="i-heroicons-envelope" variant="ghost" color="neutral" />
-      <UButton icon="i-simple-icons-x" variant="ghost" color="neutral" />
-    </div>
+    <div class="flex-1 w-full flex gap-3 justify-center items-center border-t border-white/5">
+  <UButton 
+    icon="i-simple-icons-github" 
+    variant="ghost" 
+    color="neutral" 
+    to="https://github.com/PuppetRuler" 
+    target="_blank" 
+  />
+  
+  <UButton 
+    icon="i-ph-paper-plane-tilt-bold" 
+    variant="ghost" 
+    color="neutral" 
+    to="https://t.me/sixty_three" 
+    target="_blank" 
+  />
+  
+  <UButton 
+    icon="i-heroicons-envelope-20-solid" 
+    variant="ghost" 
+    color="neutral" 
+    to="mailto:ziyelixiang@gmail.com" 
+    target="_blank" 
+  />
+</div>
   </UCard>
 </template>
 
