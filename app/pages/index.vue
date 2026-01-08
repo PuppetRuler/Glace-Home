@@ -6,23 +6,27 @@
       <!-- 页眉 -->
       <div class="w-full z-50">
         <Transition name="fade-slide" mode="out-in">
-          <header
-            v-if="loading"
-            key="header-skeleton"
-            class="w-full py-4 px-6 flex justify-between items-center"
-          >
-            <div class="flex items-center space-x-2">
-              <div class="skeleton w-8 h-8 rounded-full"></div>
-              <div class="skeleton w-28 h-5 rounded-md"></div>
-            </div>
+          <div class="w-full">
+            <header
+              v-if="loading"
+              key="header-skeleton"
+              class="w-full py-4 px-6 flex justify-between items-center"
+            >
+              <div class="flex items-center space-x-2">
+                <div class="skeleton w-8 h-8 rounded-full"></div>
+                <div class="skeleton w-28 h-5 rounded-md"></div>
+              </div>
 
-            <div class="flex items-center space-x-4">
-              <div class="skeleton w-20 h-8 rounded-full hidden sm:block"></div>
-              <div class="skeleton w-8 h-8 rounded-full"></div>
-            </div>
-          </header>
+              <div class="flex items-center space-x-4">
+                <div
+                  class="skeleton w-20 h-8 rounded-full hidden sm:block"
+                ></div>
+                <div class="skeleton w-8 h-8 rounded-full"></div>
+              </div>
+            </header>
 
-          <Header v-else key="header-real" />
+            <Header v-else key="header-real" />
+          </div>
         </Transition>
       </div>
       <UMain class="flex-1 grid lg:grid-cols-5 items-center min-h-0">
@@ -128,62 +132,64 @@ onMounted(() => {
 
 import * as ThumbHash from "../../public/js/thumbhash";
 
-const ORIGINAL_URL = "/bg.jpg";
-
 onMounted(async () => {
   const el = document.querySelector(".bg-img") as HTMLElement;
   if (!el) return;
 
+  const isDesktop = window.innerWidth >= 768;
+  const ORIGINAL_URL = isDesktop
+    ? "/bg.jpg"
+    : "https://fastly.jsdelivr.net/gh/PuppetRuler/drawing-board@main/images/1726620907142bg.jpg";
+
   /* ========== 1. 生成 ThumbHash 占位图 ========== */
 
   const image = new Image();
+  image.crossOrigin = "Anonymous";
   image.src = ORIGINAL_URL;
 
-  await new Promise<void>((resolve) => {
-    if (image.complete) resolve();
-    else image.onload = () => resolve();
-  });
+  try {
+    await new Promise((resolve, reject) => {
+      image.onload = resolve;
+      image.onerror = reject; // 捕获加载失败
+    });
 
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return;
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      const scale = 100 / Math.max(image.width, image.height);
+      canvas.width = Math.round(image.width * scale);
+      canvas.height = Math.round(image.height * scale);
+      ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+      const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const binaryThumbHash = ThumbHash.rgbaToThumbHash(
+        pixels.width,
+        pixels.height,
+        pixels.data
+      );
+      const placeholderURL = ThumbHash.thumbHashToDataURL(binaryThumbHash);
 
-  const scale = 100 / Math.max(image.width, image.height);
-  canvas.width = Math.round(image.width * scale);
-  canvas.height = Math.round(image.height * scale);
-
-  ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-
-  const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
-  const binaryThumbHash = ThumbHash.rgbaToThumbHash(
-    pixels.width,
-    pixels.height,
-    pixels.data
-  );
-
-  const placeholderURL = ThumbHash.thumbHashToDataURL(binaryThumbHash);
+      el.style.setProperty("--bg-placeholder", `url(${placeholderURL})`);
+    }
+  } catch (e) {
+    console.error("ThumbHash 生成失败:", e);
+  }
 
   /* ========== 2. 写入占位背景（模糊层） ========== */
-
-  el.style.setProperty("--bg-placeholder", `url(${placeholderURL})`);
-
-  /* ========== 3. 等待真实图片完全加载 ========== */
 
   const img = new Image();
   img.src = ORIGINAL_URL;
 
-  await new Promise<void>((resolve) => {
-    if (img.complete) resolve();
-    else img.onload = () => resolve();
-  });
+  const finishLoading = () => {
+    el.style.setProperty("--bg-img", `url(${ORIGINAL_URL})`);
+    el.classList.add("loaded");
+  };
 
-  /* ========== 4. 写入真实背景并触发动画 ========== */
-
-  el.style.setProperty("--bg-img", `url(${ORIGINAL_URL})`);
-
-  // 触发 CSS 中的 opacity / blur 过渡
-  el.classList.add("loaded");
+  if (img.complete) {
+    finishLoading();
+  } else {
+    img.onload = finishLoading;
+    img.onerror = finishLoading; // 避免卡死在模糊状态
+  }
 });
 </script>
 
@@ -210,47 +216,45 @@ onMounted(async () => {
     background-position: -100% 0;
   }
 }
-@media screen and (min-width: 768px) {
-  .bg-img {
-    position: relative;
-    overflow: hidden;
+.bg-img {
+  position: relative;
+  overflow: hidden;
 
-    /* ⭐ 首屏立即生效 */
-    --bg-blur-opacity: 1;
-    --bg-clear-opacity: 0;
-  }
+  /* ⭐ 首屏立即生效 */
+  --bg-blur-opacity: 1;
+  --bg-clear-opacity: 0;
+}
 
-  .bg-img::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: var(--bg-img-blur);
-    background-size: cover;
-    background-position: center;
-    filter: blur(20px);
-    transform: scale(1.1);
-    opacity: var(--bg-blur-opacity);
-    transition: opacity 0.5s ease;
-    z-index: -2;
-  }
+.bg-img::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--bg-img-blur);
+  background-size: cover;
+  background-position: center;
+  filter: blur(20px);
+  transform: scale(1.1);
+  opacity: var(--bg-blur-opacity);
+  transition: opacity 0.5s ease;
+  z-index: -2;
+}
 
-  .bg-img::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: var(--bg-img);
-    background-size: cover;
-    background-position: center;
-    opacity: var(--bg-clear-opacity);
-    transition: opacity 0.5s ease;
-    z-index: -1;
-  }
+.bg-img::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--bg-img);
+  background-size: cover;
+  background-position: center;
+  opacity: var(--bg-clear-opacity);
+  transition: opacity 0.5s ease;
+  z-index: -1;
+}
 
-  /* 加载完成态 */
-  .bg-img.loaded {
-    --bg-blur-opacity: 0;
-    --bg-clear-opacity: 1;
-  }
+/* 加载完成态 */
+.bg-img.loaded {
+  --bg-blur-opacity: 0;
+  --bg-clear-opacity: 1;
 }
 
 /* 遮罩层：中心浓郁、向外围淡出 */

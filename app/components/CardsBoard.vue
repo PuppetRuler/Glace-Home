@@ -30,16 +30,13 @@
               <div class="flex items-center justify-center w-full">
                 <p
                   class="font-['Allura'] text-[1.1em] font-bold text-center w-full translate-y-1
-                        /* 亮色模式：深色文字 */
                         text-zinc-800/90 
-                        /* 暗色模式：白色文字 */
                         dark:text-white/90 
-                        /* 确保颜色切换平滑 */
                         transition-colors duration-300"
                 >
                   <template v-if="loading">加载中...</template>
                   <template v-else-if="error">暂无一句话 • 错误</template>
-                  <template v-else>{{ sentence.slice(0,-1) }}</template>
+                  <template v-else>{{ sentence}}</template>
                 </p>
               </div>
             </div>
@@ -81,7 +78,7 @@ async function fetchSentence() {
     if (!res.ok) throw new Error('无法获取一句话')
     const data = await res.json() as any
     // API 返回字段 { hitokoto: '...', from: '...', ... }
-    sentence.value = String(data.hitokoto || data.content || data.sentence || '')
+    sentence.value = String(data.hitokoto || '').replace(/[，。！？；：、.,!?;:]+$/, "")
   } catch (e: any) {
     error.value = e?.message || String(e)
     sentence.value = ''
