@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-1 grid-rows-5 w-full h-full">
+  <div class="grid grid-cols-1 grid-rows-5 w-full h-full pt-10">
     <div class="row-span-1 hidden sm:block">
       <UCard
         :ui="{
@@ -29,7 +29,13 @@
             <div class="ml-4 rounded-full shadow-[inset_0_0_10px_rgba(0,0,0,0.5)] flex-4 flex h-full items-center justify-center px-4">
               <div class="flex items-center justify-center w-full">
                 <p
-                  class="font-['Allura'] text-[1.1em] font-bold text-white/90 text-center w-full translate-y-1"
+                  class="font-['Allura'] text-[1.1em] font-bold text-center w-full translate-y-1
+                        /* 亮色模式：深色文字 */
+                        text-zinc-800/90 
+                        /* 暗色模式：白色文字 */
+                        dark:text-white/90 
+                        /* 确保颜色切换平滑 */
+                        transition-colors duration-300"
                 >
                   <template v-if="loading">加载中...</template>
                   <template v-else-if="error">暂无一句话 • 错误</template>
@@ -74,7 +80,7 @@ async function fetchSentence() {
     const res = await fetch(API_URL)
     if (!res.ok) throw new Error('无法获取一句话')
     const data = await res.json() as any
-    // API 返回字段通常是 { hitokoto: '...', from: '...', ... }
+    // API 返回字段 { hitokoto: '...', from: '...', ... }
     sentence.value = String(data.hitokoto || data.content || data.sentence || '')
   } catch (e: any) {
     error.value = e?.message || String(e)

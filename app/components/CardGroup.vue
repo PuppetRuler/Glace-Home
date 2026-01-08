@@ -1,6 +1,9 @@
 <template>
   <div class="w-full max-w-6xl mx-auto pt-8">
-    <div class="flex items-center space-x-2 text-white/90 mb-6 px-4">
+    <div class="flex items-center space-x-2 mb-6 px-4
+            text-zinc-800 
+            dark:text-white/90 
+            transition-colors duration-300">
       <UIcon name="i-heroicons-link" class="w-6 h-6 rotate-45" />
       <h2 class="text-xl font-medium tracking-wider">网站列表</h2>
     </div>
@@ -31,10 +34,20 @@
                 class="absolute -top-[50%] -right-[50%] w-full h-full bg-linear-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl"
               ></div>
             </div>
-            <UIcon :name="item.icon" class="w-10 h-10 text-white" />
-            <span class="text-xl font-normal text-white tracking-widest">{{
-              item.name
-            }}</span>
+            <UIcon 
+              :name="item.icon" 
+              class="w-10 h-10 transition-colors duration-300
+                    text-zinc-800 
+                    dark:text-white" 
+            />
+
+            <span 
+              class="text-xl font-normal tracking-widest transition-colors duration-300
+                    text-zinc-800 
+                    dark:text-white/90"
+            >
+              {{ item.name }}
+            </span>
           </a>
 
           <!-- 其他卡片视觉为暂不可用 -->
@@ -49,10 +62,20 @@
                 class="absolute -top-[50%] -right-[50%] w-full h-full bg-linear-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl"
               ></div>
             </div>
-            <UIcon :name="item.icon" class="w-10 h-10 text-white/60" />
-            <span class="text-xl font-normal text-white/60 tracking-widest">{{
-              item.name
-            }}</span>
+            <UIcon 
+              :name="item.icon" 
+              class="w-10 h-10 transition-colors duration-300
+                    text-zinc-800 
+                    dark:text-white" 
+            />
+
+            <span 
+              class="text-xl font-normal tracking-widest transition-colors duration-300
+                    text-zinc-800 
+                    dark:text-white/90"
+            >
+              {{ item.name }}
+            </span>
 
             <div
               class="card-badge absolute top-3 right-3 text-xs rounded-full px-2 py-0.5 bg-white/10 text-white/80 opacity-0 transition-opacity duration-200 pointer-events-none"
@@ -160,7 +183,7 @@ let lastSamples: Array<{ x: number; t: number }> = [];
 
 const onPointerDown = (e: PointerEvent) => {
   if (!scrollContainer.value) return;
-  // 如果点击目标位于交互元素内部（如 <a>），不要在容器上启动拖拽，保留链接默认行为
+  // 如果点击目标位于交互元素内部，不要在容器上启动拖拽，保留链接默认行为
   const target = e.target as HTMLElement | null;
   if (
     target &&
@@ -291,7 +314,7 @@ onUnmounted(() => {
   opacity: 0.6;
 }
 
-/* 之前实现的左下角阴影 */
+/* 左下角阴影 */
 .group:hover {
   box-shadow: -15px 15px 30px -5px rgba(0, 0, 0, 0.6);
 }
