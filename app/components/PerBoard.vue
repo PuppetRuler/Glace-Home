@@ -14,19 +14,15 @@
       <div class="flex-1 flex flex-col justify-center items-center min-h-[40vh]">
         <h1
           class="font-['Allura'] px-4 py-4 
-                /* 响应式字号 */
                 text-5xl md:text-7xl lg:text-8xl 
                 font-bold tracking-wider 
                 
-                /* --- 亮色模式 (默认)：深色渐变 --- */
                 bg-linear-to-br from-zinc-900 via-zinc-700 to-zinc-400
                 drop-shadow-[0_2px_5px_rgba(0,0,0,0.1)]
 
-                /* --- 暗色模式：白色渐变 --- */
                 dark:from-white dark:via-white/80 dark:to-white/20
                 dark:drop-shadow-[0_2px_10px_rgba(255,255,255,0.3)]
 
-                /* 过度效果 */
                 bg-clip-text text-transparent 
                 w-fit transition-all duration-300"
         >
