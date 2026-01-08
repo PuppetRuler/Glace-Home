@@ -3,9 +3,9 @@ export default defineNuxtConfig({
     head: {
       link: [
         // 核心：Google 搜索抓取的图标
-        { rel: 'icon', type: 'image/jpeg', href: '/favicon-48.ico' },
+        { rel: 'icon', type: 'image/png', href: '/favicon-48.png' },
         // Apple 设备图标（建议也加上）
-        { rel: 'apple-touch-icon', href: '/favicon-48.ico' }
+        { rel: 'apple-touch-icon', href: '/favicon-48.png' }
       ]
     }
   },
