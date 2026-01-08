@@ -4,7 +4,27 @@
     <div class="fixed inset-0 vignette-overlay backdrop-saturate-150 z-0"></div>
     <UContainer class="min-h-screen flex flex-col pt-3 relative z-10">
       <!-- 页眉 -->
-      <Header />
+      <div class="w-full z-50">
+        <Transition name="fade-slide" mode="out-in">
+          <header
+            v-if="loading"
+            key="header-skeleton"
+            class="w-full py-4 px-6 flex justify-between items-center"
+          >
+            <div class="flex items-center space-x-2">
+              <div class="skeleton w-8 h-8 rounded-full"></div>
+              <div class="skeleton w-28 h-5 rounded-md"></div>
+            </div>
+
+            <div class="flex items-center space-x-4">
+              <div class="skeleton w-20 h-8 rounded-full hidden sm:block"></div>
+              <div class="skeleton w-8 h-8 rounded-full"></div>
+            </div>
+          </header>
+
+          <Header v-else key="header-real" />
+        </Transition>
+      </div>
       <UMain class="flex-1 grid lg:grid-cols-5 items-center min-h-0">
         <!-- 左侧：PerBoard 或其骨架 -->
         <div class="lg:col-span-2 mt-4 sm:mt-0 lg:h-4/5 min-h-40">

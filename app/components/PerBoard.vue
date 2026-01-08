@@ -47,6 +47,4 @@
 
 <script setup lang="ts"></script>
   
-<style scoped lang="sass">
-  @import url('https://fonts.googleapis.com/css2?family=Allura&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-</style>
+<style scoped lang="sass"></style>
