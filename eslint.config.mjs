@@ -16,7 +16,9 @@ export default withNuxt(
       // <script> 中看到 <T> 时，不会将其误报为非法标签名
       'vue/no-parsing-error': ['error', {
         'invalid-first-character-of-tag-name': false
-      }]
+      }],
+      // 关闭“Transition 内部必须有 v-if/v-show”的检查
+      'vue/require-toggle-inside-transition': 'off'
     }
   }
 )
