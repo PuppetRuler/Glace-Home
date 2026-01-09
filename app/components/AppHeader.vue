@@ -4,18 +4,9 @@
   >
     <template #left>
       <div class="flex items-center gap-3">
-        <UAvatar
-          class="h-10 w-auto"
-          size="3xl"
-          src="/favicon.ico"
-        />
+        <UAvatar class="h-10 w-auto" size="3xl" src="/favicon.ico" />
         <h1
-          class="text-3xl pl-2 font-bold tracking-wide transition-all duration-300 font-['Allura']
-                bg-clip-text text-transparent
-
-                bg-linear-to-br from-zinc-900 via-zinc-700 to-zinc-400
-
-                dark:from-white dark:via-white/80 dark:to-white/20"
+          class="text-3xl pl-2 font-bold tracking-wide transition-all duration-300 font-['Allura'] bg-clip-text text-transparent bg-linear-to-br from-zinc-900 via-zinc-700 to-zinc-400 dark:from-white dark:via-white/80 dark:to-white/20"
         >
           glace's Home
         </h1>
@@ -38,4 +29,7 @@
 
 <script setup lang="ts"></script>
 
-<style scoped></style>
+<style lang="sass">
+button[aria-label="Open menu"]
+  display: none
+</style>

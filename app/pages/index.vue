@@ -5,39 +5,32 @@
     <UContainer class="min-h-screen flex flex-col pt-3 relative z-10">
       <!-- 页眉 -->
       <div class="w-full z-50">
-        <Transition
-          name="fade-slide"
-          mode="out-in"
-        >
-          <header
-            v-if="loading"
-            key="header-skeleton"
-            class="w-full py-4 px-6 flex justify-between items-center"
-          >
-            <div class="flex items-center space-x-2">
-              <div class="skeleton w-8 h-8 rounded-full" />
-              <div class="skeleton w-28 h-5 rounded-md" />
-            </div>
+        <Transition name="fade-slide" mode="out-in">
+          <div class="w-full">
+            <header
+              v-if="loading"
+              key="header-skeleton"
+              class="w-full py-4 px-6 flex justify-between items-center"
+            >
+              <div class="flex items-center space-x-2">
+                <div class="skeleton w-8 h-8 rounded-full" />
+                <div class="skeleton w-28 h-5 rounded-md" />
+              </div>
 
-            <div class="flex items-center space-x-4">
-              <div class="skeleton w-20 h-8 rounded-full hidden sm:block" />
-              <div class="skeleton w-8 h-8 rounded-full" />
-            </div>
-          </header>
+              <div class="flex items-center space-x-4">
+                <div class="skeleton w-20 h-8 rounded-full hidden sm:block" />
+                <div class="skeleton w-8 h-8 rounded-full" />
+              </div>
+            </header>
 
-          <AppHeader
-            v-else
-            key="header-real"
-          />
+            <AppHeader v-else key="header-real" />
+          </div>
         </Transition>
       </div>
       <UMain class="flex-1 grid lg:grid-cols-5 items-center min-h-0">
         <!-- 左侧：PerBoard 或其骨架 -->
         <div class="lg:col-span-2 mt-4 sm:mt-0 lg:h-4/5 min-h-40">
-          <Transition
-            name="fade-slide"
-            mode="out-in"
-          >
+          <Transition name="fade-slide" mode="out-in">
             <template v-if="loading">
               <div
                 class="w-full h-full rounded-4xl bg-white/5 backdrop-blur-sm p-6 flex flex-col items-center"
@@ -73,10 +66,7 @@
         <div
           class="lg:col-span-3 h-full flex justify-center items-center sm:px-[10%] min-h-0 overflow-hidden"
         >
-          <Transition
-            name="fade-slide"
-            mode="out-in"
-          >
+          <Transition name="fade-slide" mode="out-in">
             <template v-if="loading">
               <div class="grid grid-cols-1 grid-rows-5 w-full h-full">
                 <div class="row-span-1 hidden sm:block mt-8">
@@ -125,78 +115,78 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted } from "vue";
 
-import * as ThumbHash from '../../public/js/thumbhash'
+import * as ThumbHash from "../../public/js/thumbhash";
 
 // 简单加载状态：可以在未来替换为真实的数据加载逻辑或由子组件触发
-const loading = ref(true)
+const loading = ref(true);
 
 onMounted(() => {
   // 给出一个最小的骨架显示时间以避免闪烁
-  const minSkeletonMs = 350
-  setTimeout(() => (loading.value = false), minSkeletonMs)
-})
+  const minSkeletonMs = 350;
+  setTimeout(() => (loading.value = false), minSkeletonMs);
+});
 
 onMounted(async () => {
-  const el = document.querySelector('.bg-img') as HTMLElement
-  if (!el) return
+  const el = document.querySelector(".bg-img") as HTMLElement;
+  if (!el) return;
 
-  const isDesktop = window.innerWidth >= 768
+  const isDesktop = window.innerWidth >= 768;
   const ORIGINAL_URL = isDesktop
-    ? '/bg.jpg'
-    : 'https://fastly.jsdelivr.net/gh/PuppetRuler/drawing-board@main/images/1726620907142bg.jpg'
+    ? "/bg.jpg"
+    : "https://fastly.jsdelivr.net/gh/PuppetRuler/drawing-board@main/images/1726620907142bg.jpg";
 
   /* ========== 1. 生成 ThumbHash 占位图 ========== */
 
-  const image = new Image()
-  image.crossOrigin = 'Anonymous'
-  image.src = ORIGINAL_URL
+  const image = new Image();
+  image.crossOrigin = "Anonymous";
+  image.src = ORIGINAL_URL;
 
   try {
     await new Promise((resolve, reject) => {
-      image.onload = resolve
-      image.onerror = reject // 捕获加载失败
-    })
+      image.onload = resolve;
+      image.onerror = reject; // 捕获加载失败
+    });
 
-    const canvas = document.createElement('canvas')
-    const ctx = canvas.getContext('2d')
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
     if (ctx) {
-      const scale = 100 / Math.max(image.width, image.height)
-      canvas.width = Math.round(image.width * scale)
-      canvas.height = Math.round(image.height * scale)
-      ctx.drawImage(image, 0, 0, canvas.width, canvas.height)
-      const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height)
+      const scale = 100 / Math.max(image.width, image.height);
+      canvas.width = Math.round(image.width * scale);
+      canvas.height = Math.round(image.height * scale);
+      ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+      const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height);
       const binaryThumbHash = ThumbHash.rgbaToThumbHash(
         pixels.width,
         pixels.height,
         pixels.data
-      )
-      const placeholderURL = ThumbHash.thumbHashToDataURL(binaryThumbHash)
+      );
+      const placeholderURL = ThumbHash.thumbHashToDataURL(binaryThumbHash);
 
-      el.style.setProperty('--bg-placeholder', `url(${placeholderURL})`)
+      el.style.setProperty("--bg-placeholder", `url(${placeholderURL})`);
     }
   } catch (e) {
-    console.error('ThumbHash 生成失败:', e)
+    console.error("ThumbHash 生成失败:", e);
   }
 
   /* ========== 2. 写入占位背景（模糊层） ========== */
 
-  const img = new Image()
-  img.src = ORIGINAL_URL
+  const img = new Image();
+  img.src = ORIGINAL_URL;
 
   const finishLoading = () => {
-    el.style.setProperty('--bg-img', `url(${ORIGINAL_URL})`)
-    el.classList.add('loaded')
-  }
+    el.style.setProperty("--bg-img", `url(${ORIGINAL_URL})`);
+    el.classList.add("loaded");
+  };
 
   if (img.complete) {
-    finishLoading()
+    finishLoading();
   } else {
-    img.onload = finishLoading
-    img.onerror = finishLoading // 避免卡死在模糊状态
+    img.onload = finishLoading;
+    img.onerror = finishLoading; // 避免卡死在模糊状态
   }
-})
+});
 </script>
 
 <style scoped lang="sass">
