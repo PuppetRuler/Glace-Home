@@ -2,5 +2,21 @@
 import withNuxt from './.nuxt/eslint.config.mjs'
 
 export default withNuxt(
-  // Your custom configs here
+  {
+    rules: {
+      // 1. 允许在一行中写多个语句（例如单行 try-catch）
+      '@stylistic/max-statements-per-line': 'off',
+
+      // 2. 允许空块（no-empty），或者更建议：仅允许空的 catch 块
+      'no-empty': ['error', { allowEmptyCatch: true }],
+
+      // 不处理空函数的报错
+      '@typescript-eslint/no-empty-function': 'off',
+
+      // <script> 中看到 <T> 时，不会将其误报为非法标签名
+      'vue/no-parsing-error': ['error', {
+        'invalid-first-character-of-tag-name': false
+      }]
+    }
+  }
 )

@@ -4,14 +4,12 @@
       <UCard
         :ui="{
           root: 'bg-background/50 backdrop-blur-sm min-h-5 transition-all ring-0',
-          body: 'w-full h-full sm:py-2',
+          body: 'w-full h-full sm:py-2'
         }"
         class="rounded-full dark:shadow-[inset_0_2px_2px_0_rgba(255,255,255,0.1)] shadow-[inset_0_2px_2px_0_rgba(0,0,0,0.1)] h-1/2 w-full flex items-center border-b border-black mt-8"
       >
         <div class="flex w-full h-full items-center">
-          <div
-            class="flex-1 grid grid-cols-4 h-full items-center gap-2"
-          >
+          <div class="flex-1 grid grid-cols-4 h-full items-center gap-2">
             <!-- 图标 -->
             <UIcon
               name="i-heroicons-clock"
@@ -19,27 +17,35 @@
             />
             <!-- 时间 -->
             <div class="col-span-3 flex justify-center ml-2">
-              <span
-                class="font-['Inter'] text-xl font-medium tracking-tight"
-              >
+              <span class="font-['Inter'] text-xl font-medium tracking-tight">
                 {{ currentTime }}
               </span>
             </div>
           </div>
-            <div class="ml-4 rounded-full shadow-[inset_0_0_10px_rgba(0,0,0,0.5)] flex-4 flex h-full items-center justify-center px-4">
-              <div class="flex items-center justify-center w-full">
+          <div
+            class="ml-4 rounded-full shadow-[inset_0_0_10px_rgba(0,0,0,0.5)] flex-4 flex h-full items-center justify-center px-4"
+          >
+            <div class="flex items-center justify-center w-full">
+              <Transition
+                name="fade"
+                mode="out-in"
+              >
+                <div
+                  v-if="!sentence"
+                  key="skeleton"
+                  class="skeleton w-48 h-5 rounded-md opacity-50"
+                />
+
                 <p
-                  class="font-['Allura'] text-[1.1em] font-bold text-center w-full translate-y-1
-                        text-zinc-800/90 
-                        dark:text-white/90 
-                        transition-colors duration-300"
+                  v-else
+                  key="content"
+                  class="font-['Allura'] text-[1.1em] font-bold text-center w-full translate-y-1 text-zinc-800/90 dark:text-white/90 transition-colors duration-300"
                 >
-                  <template v-if="loading">加载中...</template>
-                  <template v-else-if="error">暂无一句话 • 错误</template>
-                  <template v-else>{{ sentence}}</template>
+                  {{ sentence }}
                 </p>
-              </div>
+              </Transition>
             </div>
+          </div>
         </div>
       </UCard>
     </div>
@@ -53,8 +59,8 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const sentence = ref('')
-const loading = ref(false)
-const error = ref('')
+const _loading = ref(false)
+const _error = ref('')
 
 // 实时时钟（精确到秒）
 const currentTime = ref('')
@@ -69,27 +75,39 @@ let timerId: number | undefined
 
 const API_URL = 'https://v1.hitokoto.cn/?c=a&max_length=16'
 
-// 调用一言 API
-async function fetchSentence() {
-  loading.value = true
-  error.value = ''
-  try {
-    const res = await fetch(API_URL)
-    if (!res.ok) throw new Error('无法获取一句话')
-    const data = await res.json() as any
-    // API 返回字段 { hitokoto: '...', from: '...', ... }
-    sentence.value = String(data.hitokoto || '').replace(/[，。！？；：、.,!?;:]+$/, "")
-  } catch (e: any) {
-    error.value = e?.message || String(e)
-    sentence.value = ''
-  } finally {
-    loading.value = false
-  }
+interface HitokotoResponse {
+  hitokoto: string
+  from: string
 }
 
+// server: false 确保该请求仅在客户端发起，不会阻塞 SSR
+// lazy: true 允许组件先挂载，数据异步加载
+const {
+  data
+} = await useFetch<HitokotoResponse>(API_URL, {
+  server: false,
+  lazy: true,
+  transform: (res) => {
+    // 直接在 transform 中清洗数据，这样 data.value 拿到的就是干净的
+    return {
+      ...res,
+      hitokoto: res.hitokoto.replace(/[，。！？；：、.,!?;:]+$/, '')
+    }
+  }
+})
+
+watch(
+  data,
+  (newData) => {
+    if (newData?.hitokoto) {
+      // 仅在有数据时赋值，初始保持为空字符串
+      sentence.value = newData.hitokoto
+    }
+  },
+  { immediate: true }
+)
+
 onMounted(() => {
-  // 仅在客户端执行网络请求，避免 SSR 阻塞
-  fetchSentence()
   // 启动实时时钟
   updateTime()
   timerId = window.setInterval(updateTime, 1000)
@@ -100,6 +118,10 @@ onUnmounted(() => {
 })
 </script>
 
-<style scoped>
-  @import url('https://fonts.googleapis.com/css2?family=Allura&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+SC:wght@100..900&display=swap');
+<style scoped lang="sass">
+.fade-enter-active, .fade-leave-active
+  transition: opacity 0.2s ease
+
+.fade-enter-from, .fade-leave-to
+  opacity: 0
 </style>

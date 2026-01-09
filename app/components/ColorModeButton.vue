@@ -35,7 +35,7 @@ const currentIcon = computed(() => {
 
 onMounted(() => {
   isMounted.value = true
-  
+
   // 初始化校准：如果 cookie 还没存过，把当前模式存进去
   if (!colorCookie.value) {
     colorCookie.value = colorMode.value

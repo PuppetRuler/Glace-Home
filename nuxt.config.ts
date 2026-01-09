@@ -1,4 +1,11 @@
 export default defineNuxtConfig({
+  modules: [
+    '@nuxt/eslint',
+    '@nuxt/ui'
+  ],
+  devtools: {
+    enabled: true
+  },
   app: {
     head: {
       link: [
@@ -9,17 +16,10 @@ export default defineNuxtConfig({
       ]
     }
   },
-  modules: [
-    '@nuxt/eslint',
-    '@nuxt/ui'
-  ],
-  ui: {
-    "fonts": false
-  },
-  devtools: {
-    enabled: true
-  },
   css: ['~/assets/css/main.css'],
+  ui: {
+    fonts: false
+  },
   routeRules: {
     '/': { prerender: true }
   },
