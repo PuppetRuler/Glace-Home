@@ -12,7 +12,7 @@
         class="w-30 h-30 lg:w-25 lg:h-40 ring-4 ring-white/10 shadow-2xl"
       />
       <div class="flex-1 flex flex-col justify-center items-center min-h-[40vh]">
-        <h1
+        <div
           class="font-['Allura'] px-4 py-4
                 text-5xl md:text-7xl lg:text-8xl
                 font-bold tracking-wider
@@ -27,7 +27,7 @@
                 w-fit transition-all duration-300"
         >
           glace
-        </h1>
+      </div>
       </div>
     </div>
 
