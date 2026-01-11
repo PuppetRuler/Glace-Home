@@ -127,8 +127,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-
 import * as ThumbHash from '../../public/js/thumbhash'
 
 // 简单加载状态：可以在未来替换为真实的数据加载逻辑或由子组件触发

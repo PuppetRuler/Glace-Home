@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { onMounted } from 'vue'
 import * as ThumbHash from '../../public/js/thumbhash'
 
 interface Props {

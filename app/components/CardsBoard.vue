@@ -56,11 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-
 const sentence = ref('')
-const _loading = ref(false)
-const _error = ref('')
 
 // 实时时钟（精确到秒）
 const currentTime = ref('')
@@ -98,7 +94,7 @@ const {
 
 watch(
   data,
-  (newData) => {
+  (newData: { hitokoto: any }) => {
     if (newData?.hitokoto) {
       // 仅在有数据时赋值，初始保持为空字符串
       sentence.value = newData.hitokoto
