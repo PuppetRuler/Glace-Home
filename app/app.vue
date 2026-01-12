@@ -7,7 +7,6 @@
 </template>
 
 <script setup lang="ts">
-
 useSeoMeta({
   // 搜索结果的紫色大标题
   title: 'Glace - 傀儡师的个人主页',

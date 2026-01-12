@@ -27,7 +27,7 @@
                 w-fit transition-all duration-300"
         >
           glace
-      </div>
+        </div>
       </div>
     </div>
 

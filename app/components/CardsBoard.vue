@@ -94,9 +94,9 @@ const {
 
 watch(
   data,
-  (newData: { hitokoto: any }) => {
+  (newData) => {
+    // 此时 newData 的类型被推导为 HitokotoResponse | undefined
     if (newData?.hitokoto) {
-      // 仅在有数据时赋值，初始保持为空字符串
       sentence.value = newData.hitokoto
     }
   },
