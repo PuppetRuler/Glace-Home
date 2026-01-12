@@ -1,6 +1,8 @@
 <template>
   <div class="w-full max-w-6xl mx-auto pt-8">
-    <div class="flex items-center space-x-2 mb-6 px-4 text-zinc-800 dark:text-white/90 transition-colors duration-300">
+    <div
+      class="flex items-center space-x-2 mb-6 px-4 text-zinc-800 dark:text-white/90 transition-colors duration-300"
+    >
       <UIcon
         name="i-heroicons-link"
         class="w-6 h-6 rotate-45"
@@ -25,40 +27,56 @@
           :key="item.name"
           class="relative border-none"
         >
+          <!-- 可用链接 -->
           <a
-            v-if="item.url"
+            v-if="item.enable"
             :href="item.url"
             target="_blank"
             rel="noopener noreferrer"
             class="group h-32 cursor-pointer transition-all duration-500 rounded-2xl dark:shadow-[0_2px_4px_1px_rgba(0,0,0,0.5),inset_-1px_1px_4px_1px_rgba(255,255,255,0.2)] bg-white/5 backdrop-blur-xl flex flex-col items-center justify-center gap-2 hover:scale-105 hover:shadow-[-15px_15px_30px_rgba(0,0,0,0.5)] text-center"
           >
-            <div class="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
-              <div class="absolute -top-[50%] -right-[50%] w-full h-full bg-linear-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl" />
+            <div
+              class="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none"
+            >
+              <div
+                class="absolute -top-[50%] -right-[50%] w-full h-full bg-linear-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl"
+              />
             </div>
             <UIcon
               :name="item.icon"
               class="w-10 h-10 transition-colors duration-300 text-zinc-800 dark:text-white"
             />
-            <span class="text-xl font-normal tracking-widest transition-colors duration-300 text-zinc-800 dark:text-white/90">
+            <span
+              class="text-xl font-normal tracking-widest transition-colors duration-300 text-zinc-800 dark:text-white/90"
+            >
               {{ item.name }}
             </span>
           </a>
 
+          <!-- 不可用链接 -->
           <div
             v-else
             class="card-unavailable group relative h-32 cursor-not-allowed transition-all duration-500 rounded-2xl dark:shadow-[0_2px_4px_1px_rgba(0,0,0,0.5),inset_-1px_1px_4px_1px_rgba(255,255,255,0.2)] bg-white/5 backdrop-blur-xl flex flex-col items-center justify-center gap-2 hover:scale-105 text-center"
           >
-            <div class="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
-              <div class="absolute -top-[50%] -right-[50%] w-full h-full bg-linear-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl" />
+            <div
+              class="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none"
+            >
+              <div
+                class="absolute -top-[50%] -right-[50%] w-full h-full bg-linear-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl"
+              />
             </div>
             <UIcon
               :name="item.icon"
               class="w-10 h-10 transition-colors duration-300 text-zinc-800 dark:text-white"
             />
-            <span class="text-xl font-normal tracking-widest transition-colors duration-300 text-zinc-800 dark:text-white/90">
+            <span
+              class="text-xl font-normal tracking-widest transition-colors duration-300 text-zinc-800 dark:text-white/90"
+            >
               {{ item.name }}
             </span>
-            <div class="card-badge absolute top-3 right-3 text-xs rounded-full px-2 py-0.5 bg-white/10 text-white/80 opacity-0 transition-opacity duration-200 pointer-events-none">
+            <div
+              class="card-badge absolute top-3 right-3 text-xs rounded-full px-2 py-0.5 bg-white/10 text-white/80 opacity-0 transition-opacity duration-200 pointer-events-none"
+            >
               暂不可用
             </div>
           </div>
@@ -79,39 +97,92 @@
 </template>
 
 <script setup lang="ts">
-// 1. 统一管理所有链接，添加或删除只需修改此处
-const allLinks = [
-  { name: '博客', icon: 'i-heroicons-rss-20-solid', url: 'https://blog.glace.top' },
-  { name: '网盘', icon: 'i-heroicons-cloud-20-solid' },
-  { name: '音乐', icon: 'i-heroicons-musical-note-20-solid' },
-  { name: '起始页', icon: 'i-heroicons-home-modern-20-solid' },
-  { name: '网址集', icon: 'i-heroicons-book-open-20-solid' },
-  { name: '今日热榜', icon: 'i-heroicons-fire-20-solid' },
-  { name: '更多内容', icon: 'i-heroicons-ellipsis-horizontal' },
-  { name: '设置', icon: 'i-heroicons-cog-6-tooth' },
-  { name: '反馈', icon: 'i-heroicons-chat-bubble-left-right' }
+// 链接配置接口
+interface LinkItem {
+  name: string
+  icon: string
+  url?: string
+  enable: boolean
+}
+
+// 统一管理所有链接配置
+const allLinks: LinkItem[] = [
+  {
+    name: '博客',
+    icon: 'i-heroicons-rss-20-solid',
+    url: 'https://blog.glace.top',
+    enable: true
+  },
+  {
+    name: '网址集',
+    icon: 'i-heroicons-book-open-20-solid',
+    url: 'https://res.glace.top',
+    enable: true
+  },
+  {
+    name: '网盘',
+    icon: 'i-heroicons-cloud-20-solid',
+    url: '',
+    enable: false
+  },
+  {
+    name: '音乐',
+    icon: 'i-heroicons-musical-note-20-solid',
+    url: '',
+    enable: false
+  },
+  {
+    name: '起始页',
+    icon: 'i-heroicons-home-modern-20-solid',
+    url: '',
+    enable: false
+  },
+  {
+    name: '今日热榜',
+    icon: 'i-heroicons-fire-20-solid',
+    url: '',
+    enable: false
+  },
+  {
+    name: '更多内容',
+    icon: 'i-heroicons-ellipsis-horizontal',
+    url: '',
+    enable: false
+  },
+  {
+    name: '设置',
+    icon: 'i-heroicons-cog-6-tooth',
+    url: '',
+    enable: false
+  },
+  {
+    name: '反馈',
+    icon: 'i-heroicons-chat-bubble-left-right',
+    url: '',
+    enable: false
+  }
 ]
 
 const scrollContainer = ref<HTMLElement | null>(null)
 const activeIndex = ref(0)
 const isMobile = ref(false)
 
-// 2. 泛型函数：改用标准 function 声明以避开 ESLint 对 <T> 的解析错误
+// 数组分块函数
 function chunkArray<T>(arr: T[], size: number): T[][] {
-  const out: T[][] = []
+  const result: T[][] = []
   for (let i = 0; i < arr.length; i += size) {
-    out.push(arr.slice(i, i + size))
+    result.push(arr.slice(i, i + size))
   }
-  return out
+  return result
 }
 
-// 3. 自动计算分页内容
+// 自动计算分页内容
 const pages = computed(() => {
-  // 移动端 (< 640px) 每页 4 个 (2x2)，桌面端每页 6 个 (2x3 或 3x2)
   const chunkSize = isMobile.value ? 4 : 6
   return chunkArray(allLinks, chunkSize)
 })
 
+// 更新响应式断点
 const updateBreakpoint = () => {
   if (typeof window !== 'undefined') {
     isMobile.value = window.matchMedia('(max-width: 639px)').matches
@@ -134,7 +205,7 @@ const scrollToPage = (index: number) => {
   }
 }
 
-// --- 拖拽翻页逻辑保持不变 ---
+// 拖拽翻页逻辑
 let isDown = false
 let startX = 0
 let startScrollLeft = 0
@@ -147,7 +218,9 @@ const onPointerDown = (e: PointerEvent) => {
   if (target?.closest('a,button,input,[role="button"]')) return
 
   isDown = true
-  try { el.setPointerCapture(e.pointerId) } catch {}
+  try {
+    el.setPointerCapture(e.pointerId)
+  } catch {}
   startX = e.clientX
   startScrollLeft = el.scrollLeft
   lastSamples = [{ x: e.clientX, t: performance.now() }]
@@ -166,7 +239,10 @@ const endDrag = (e?: PointerEvent) => {
   const el = scrollContainer.value
   if (!el || !isDown) return
 
-  const last = lastSamples[lastSamples.length - 1] || { x: startX, t: performance.now() }
+  const last = lastSamples[lastSamples.length - 1] || {
+    x: startX,
+    t: performance.now()
+  }
   const first = lastSamples[0] || last
   const dt = Math.max(1, last.t - first.t)
   const scrollV = -(last.x - first.x) / dt
@@ -178,7 +254,9 @@ const endDrag = (e?: PointerEvent) => {
 
   el.scrollTo({ left: clamped * pageW, behavior: 'smooth' })
   isDown = false
-  try { if (e) el.releasePointerCapture(e.pointerId) } catch {}
+  try {
+    if (e) el.releasePointerCapture(e.pointerId)
+  } catch {}
   el.classList.remove('dragging')
 }
 
@@ -201,23 +279,20 @@ onUnmounted(() => {
 </script>
 
 <style scoped lang="sass">
-/* 隐藏滚动条但保留功能 */
 .no-scrollbar
   -ms-overflow-style: none
   scrollbar-width: none
-  touch-action: pan-y // 禁用默认触摸横向滚动以便自定义拖拽工作更一致
+  touch-action: pan-y
 
   &::-webkit-scrollbar
     display: none
 
-/* 拖拽时的视觉与交互优化 */
 .dragging
   cursor: grabbing !important
-  user-select: none // 避免拖动时选中文本
+  user-select: none
   -webkit-user-select: none
   -ms-user-select: none
 
-/* 不可用卡片样式：hover 时变灰并显示 badge */
 .card-unavailable
   .card-badge
     opacity: 0
@@ -233,7 +308,6 @@ onUnmounted(() => {
       color: rgba(255, 255, 255, 0.4) !important
       opacity: 0.6
 
-/* 左下角阴影 - 增强玻璃拟态的悬浮感 */
 .group:hover
   box-shadow: -15px 15px 30px -5px rgba(0, 0, 0, 0.6)
 </style>
