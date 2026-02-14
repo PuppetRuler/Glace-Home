@@ -27,59 +27,46 @@
           :key="item.name"
           class="relative border-none"
         >
-          <!-- 可用链接 -->
-          <a
-            v-if="item.enable"
-            :href="item.url"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="group h-32 cursor-pointer transition-all duration-500 rounded-2xl dark:shadow-[0_2px_4px_1px_rgba(0,0,0,0.5),inset_-1px_1px_4px_1px_rgba(255,255,255,0.2)] bg-white/5 backdrop-blur-xl flex flex-col items-center justify-center gap-2 hover:scale-105 hover:shadow-[-15px_15px_30px_rgba(0,0,0,0.5)] text-center"
+          <!-- 链接卡片：单一 UCard，根据 item.enable 动态渲染为 <a> 或 <div> 并调整样式 -->
+          <component
+            :is="item.enable ? 'a' : 'div'"
+            v-bind="item.enable ? { href: item.url, target: '_blank', rel: 'noopener noreferrer', class: 'no-underline' } : {}"
           >
-            <div
-              class="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none"
+            <UCard
+              :disabled="!item.enable"
+              :class="item.enable
+                ? 'group available h-32 cursor-pointer transition-all duration-300 rounded-2xl bg-background/50 backdrop-blur-sm dark:shadow-[inset_2px_2px_2px_0_rgba(255,255,255,0.2),2px_2px_2px_0_rgba(0,0,0,0.2)] shadow-[inset_2_2px_2px_0_rgba(0,0,0,0.2),2px_2px_2px_0_rgba(255,255,255,0.2)] ring-0 transform hover:-translate-y-1 hover:-translate-x-1 text-center'
+                : 'group card-unavailable relative h-32 cursor-not-allowed transition-all duration-300 rounded-2xl bg-background/50 backdrop-blur-sm dark:shadow-[inset_2px_2px_2px_0_rgba(255,255,255,0.2),2px_2px_2px_0_rgba(0,0,0,0.2)] shadow-[inset_2_2px_2px_0_rgba(0,0,0,0.2),2px_2px_2px_0_rgba(255,255,255,0.2)] ring-0 text-center'"
+              :ui="{
+                root: 'relative overflow-hidden',
+                body: 'flex flex-col items-center justify-center gap-2'
+              }"
             >
               <div
-                class="absolute -top-[50%] -right-[50%] w-full h-full bg-linear-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl"
+                v-if="!item.enable"
+                class="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none"
+              >
+                <div
+                  class="absolute -top-[50%] -right-[50%] w-full h-full bg-linear-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl"
+                />
+              </div>
+              <UIcon
+                :name="item.icon"
+                class="w-10 h-10 transition-colors duration-300 text-zinc-800 dark:text-white"
               />
-            </div>
-            <UIcon
-              :name="item.icon"
-              class="w-10 h-10 transition-colors duration-300 text-zinc-800 dark:text-white"
-            />
-            <span
-              class="text-xl font-normal tracking-widest transition-colors duration-300 text-zinc-800 dark:text-white/90"
-            >
-              {{ item.name }}
-            </span>
-          </a>
-
-          <!-- 不可用链接 -->
-          <div
-            v-else
-            class="card-unavailable group relative h-32 cursor-not-allowed transition-all duration-500 rounded-2xl dark:shadow-[0_2px_4px_1px_rgba(0,0,0,0.5),inset_-1px_1px_4px_1px_rgba(255,255,255,0.2)] bg-white/5 backdrop-blur-xl flex flex-col items-center justify-center gap-2 hover:scale-105 text-center"
-          >
-            <div
-              class="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none"
-            >
+              <span
+                class="text-xl font-normal tracking-widest transition-colors duration-300 text-zinc-800 dark:text-white/90"
+              >
+                {{ item.name }}
+              </span>
               <div
-                class="absolute -top-[50%] -right-[50%] w-full h-full bg-linear-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl"
-              />
-            </div>
-            <UIcon
-              :name="item.icon"
-              class="w-10 h-10 transition-colors duration-300 text-zinc-800 dark:text-white"
-            />
-            <span
-              class="text-xl font-normal tracking-widest transition-colors duration-300 text-zinc-800 dark:text-white/90"
-            >
-              {{ item.name }}
-            </span>
-            <div
-              class="card-badge absolute top-3 right-3 text-xs rounded-full px-2 py-0.5 bg-white/10 text-white/80 opacity-0 transition-opacity duration-200 pointer-events-none"
-            >
-              暂不可用
-            </div>
-          </div>
+                v-if="!item.enable"
+                class="card-badge absolute top-3 right-3 text-xs rounded-full px-2 py-0.5 bg-white/10 text-white/80 opacity-0 transition-opacity duration-200 pointer-events-none"
+              >
+                暂不可用
+              </div>
+            </UCard>
+          </component>
         </div>
       </div>
     </div>
@@ -300,14 +287,11 @@ onUnmounted(() => {
   .w-10, span
     transition: color 0.2s, opacity 0.2s
 
-  &.group:hover
+  &:hover
     .card-badge
       opacity: 1
 
     .w-10, span
       color: rgba(255, 255, 255, 0.4) !important
       opacity: 0.6
-
-.group:hover
-  box-shadow: -15px 15px 30px -5px rgba(0, 0, 0, 0.6)
 </style>

@@ -2,14 +2,13 @@
   <div class="container min-h-screen min-w-screen bg-img">
     <!-- 遮罩层 -->
     <div class="fixed inset-0 vignette-overlay backdrop-saturate-150 z-0" />
-    <UContainer class="min-h-screen flex flex-col pt-3 relative z-10">
+    <UContainer class="min-h-screen min-w-screen mx-auto flex flex-col pt-3 relative z-10">
       <!-- 页眉 -->
       <div class="w-full z-50">
         <Transition
           name="fade-slide"
           mode="out-in"
         >
-          <!-- <div class="w-full"> -->
           <header
             v-if="loading"
             key="header-skeleton"
@@ -30,12 +29,11 @@
             v-else
             key="header-real"
           />
-          <!-- </div> -->
         </Transition>
       </div>
-      <UMain class="flex-1 grid lg:grid-cols-5 items-center min-h-0">
+      <UMain class="flex-1 grid lg:grid-cols-11 items-center gap-[5%] px-5 min-h-0">
         <!-- 左侧：PerBoard 或其骨架 -->
-        <div class="lg:col-span-2 mt-4 sm:mt-0 lg:h-4/5 min-h-40">
+        <div class="lg:col-span-5 mt-4 sm:mt-0 flex items-center justify-center h-full min-h-40">
           <Transition
             name="fade-slide"
             mode="out-in"
@@ -66,14 +64,14 @@
               </div>
             </template>
             <template v-else>
-              <PerBoard />
+              <PersonCard />
             </template>
           </Transition>
         </div>
 
         <!-- 右侧：CardsBoard 或其骨架 -->
         <div
-          class="lg:col-span-3 h-full flex justify-center items-center sm:px-[10%] min-h-0 overflow-hidden"
+          class="lg:col-span-6 h-full flex justify-center items-center min-h-0 overflow-hidden"
         >
           <Transition
             name="fade-slide"

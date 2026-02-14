@@ -18,7 +18,13 @@ export default withNuxt(
         'invalid-first-character-of-tag-name': false
       }],
       // 关闭“Transition 内部必须有 v-if/v-show”的检查
-      'vue/require-toggle-inside-transition': 'off'
+      'vue/require-toggle-inside-transition': 'off',
+
+      // 将 TypeScript 的 any 检查降级为警告或直接关闭
+      '@typescript-eslint/no-explicit-any': 'off',
+
+      // 允许定义未使用的变量，或者仅警告
+      '@typescript-eslint/no-unused-vars': 'warn'
     }
   }
 )

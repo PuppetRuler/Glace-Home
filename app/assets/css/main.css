@@ -17,6 +17,11 @@
   --color-green-900: #0a5331;
   --color-green-950: #052e16;
   --bg-gradient-home: 255, 255, 255;
+  --text-color: #141414;
+}
+
+.dark{
+  --text-color: #EDEDED;
 }
 
 @media screen and (max-width: 768px) {

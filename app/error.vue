@@ -117,7 +117,7 @@ onMounted(async () => {
     blending: THREE.AdditiveBlending,
     // 在材质编译之前修改颜色器，在这里，它用来替换顶点着色器和片元着色器，添加uniform
     // 和attribute,以及自定义颜色和移动
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     onBeforeCompile: (shader: any) => {
       shader.uniforms.time = gu.time
       // 首先，它为着色器设置了一个uniform变量time,该变量是在点材质中定义的，用来追踪时间
