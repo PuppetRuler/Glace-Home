@@ -26,6 +26,7 @@
           <div class="absolute inset-0 bg-white/10 blur-2xl scale-125 rounded-full" />
           <UAvatar
             src="/favicon.ico"
+            alt="avatar"
             class="w-28 h-28 rounded-full ring-2 ring-white/40 shadow-2xl object-cover relative z-10"
           />
         </div>
@@ -54,6 +55,7 @@
         <div class="flex w-full justify-around items-center px-4">
           <UButton
             v-for="link in socialLinks"
+            :label="link.icon"
             :key="link.icon"
             :icon="link.icon"
             variant="ghost"

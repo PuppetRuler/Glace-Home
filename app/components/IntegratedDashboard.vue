@@ -21,6 +21,7 @@
           >
             <UButton
               icon="i-heroicons-backward-16-solid"
+              label="previousSong"
               variant="ghost"
               size="xs"
               color="neutral"
@@ -33,6 +34,7 @@
                   ? 'i-heroicons-pause-16-solid'
                   : 'i-heroicons-play-16-solid'
               "
+              label="togglePlay"
               variant="ghost"
               size="xs"
               color="neutral"
@@ -41,6 +43,7 @@
             />
             <UButton
               icon="i-heroicons-forward-16-solid"
+              label="nextSong"
               variant="ghost"
               size="xs"
               color="neutral"
@@ -314,7 +317,7 @@ const weatherMap: Record<number, { text: string, icon: string }> = {
 const fetchWeather = async () => {
   try {
     // 1. 通过 IP 自动定位城市及经纬度
-    const geoRes = await fetch('http://ip-api.com/json/?lang=zh-CN')
+    const geoRes = await fetch('https://ip-api.com/json/?lang=zh-CN')
     const geoData = await geoRes.json()
     const { lat, lon, city } = geoData
     weather.value.city = city || 'Unknown'

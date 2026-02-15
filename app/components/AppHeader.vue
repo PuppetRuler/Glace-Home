@@ -6,6 +6,7 @@
       <div class="flex items-center gap-3">
         <UAvatar
           class="h-10 w-auto"
+          alt="logo"
           size="3xl"
           src="/favicon.ico"
         />
@@ -26,7 +27,7 @@
         color="neutral"
         class="hover:bg-white/10"
       />
-      <ColorModeButton />
+      <ColorModeButton label="changeThemeColor" />
     </template>
   </UHeader>
 </template>

@@ -3,6 +3,8 @@ export default defineNuxtConfig({
   ssr: true,
   app: {
     head: {
+      htmlAttrs: { lang: 'zh-CN' },
+      title: 'glace\'s Home',
       link: [
         { rel: 'icon', type: 'image/png', href: '/favicon-48.png' },
         { rel: 'apple-touch-icon', href: '/favicon-48.png' }
@@ -19,7 +21,7 @@ export default defineNuxtConfig({
     fonts: false
   },
   routeRules: {
-    '/': { prerender: true }
+    '/': { prerender: true, isr: 3600 * 24 * 7 },
   },
   compatibilityDate: '2026-02-15'
 })
