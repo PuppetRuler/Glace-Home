@@ -78,7 +78,7 @@
         :key="idx"
         class="h-1.5 rounded-full transition-all duration-300"
         :class="activeIndex === idx ? 'w-8 bg-zinc-800 dark:bg-white' : 'w-4 bg-zinc-800/20 dark:bg-white/20'"
-        label="pageIndex"
+        aria-label="pageIndex"
         @click="scrollToPage(idx)"
       />
     </div>

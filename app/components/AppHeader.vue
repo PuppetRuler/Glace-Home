@@ -20,14 +20,14 @@
     <template #right>
       <UButton
         icon="i-simple-icons-github"
-        label="GitHub"
+        aria-label="GitHub"
         to="https://github.com/PuppetRuler"
         target="_blank"
         variant="ghost"
         color="neutral"
         class="hover:bg-white/10"
       />
-      <ColorModeButton label="changeThemeColor" />
+      <ColorModeButton aria-label="changeThemeColor" />
     </template>
   </UHeader>
 </template>
@@ -35,7 +35,7 @@
 <script setup lang="ts"></script>
 
 <style lang="scss">
-button[aria-label="Open menu"] {
+button[aria-aria-label="Open menu"] {
   display: none;
 }
 </style>

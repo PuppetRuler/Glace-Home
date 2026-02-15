@@ -55,7 +55,7 @@
         <div class="flex w-full justify-around items-center px-4">
           <UButton
             v-for="link in socialLinks"
-            :label="link.icon"
+            :aria-label="link.icon"
             :key="link.icon"
             :icon="link.icon"
             variant="ghost"

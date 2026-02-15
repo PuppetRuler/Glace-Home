@@ -6,8 +6,8 @@ export default defineNuxtConfig({
       htmlAttrs: { lang: 'zh-CN' },
       title: 'glace\'s Home',
       link: [
-        { rel: 'icon', type: 'image/png', href: '/favicon-48.png' },
-        { rel: 'apple-touch-icon', href: '/favicon-48.png' }
+        { rel: 'icon', type: 'image/png', href: '/favicon.ico' },
+        { rel: 'apple-touch-icon', href: '/favicon.ico' }
       ]
     }
   },
