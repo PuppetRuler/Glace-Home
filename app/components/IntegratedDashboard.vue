@@ -3,7 +3,7 @@
     <UCard
       :ui="{
         root: 'relative overflow-hidden bg-background/50 backdrop-blur-sm dark:shadow-[inset_2px_2px_2px_0_rgba(255,255,255,0.2),2px_2px_2px_0_rgba(0,0,0,0.2)] shadow-[inset_2px_2px_2px_0_rgba(0,0,0,0.2),2px_2px_2px_0_rgba(255,255,255,0.2)] ring-0',
-        body: 'p-0!',
+        body: 'p-0!'
       }"
       class="rounded-2xl border-b border-black/10 dark:border-black shadow-lg"
     >
@@ -53,10 +53,11 @@
           </div>
         </div>
         <div class="flex items-center gap-1.5 opacity-60">
-          <span class="text-[8px] font-bold tracking-[0.2em] uppercase"
-            >Aplayer</span
-          >
-          <UIcon name="i-heroicons-musical-note-16-solid" class="text-[10px]" />
+          <span class="text-[8px] font-bold tracking-[0.2em] uppercase">Aplayer</span>
+          <UIcon
+            name="i-heroicons-musical-note-16-solid"
+            class="text-[10px]"
+          />
         </div>
       </div>
       <!-- 歌词 -->
@@ -66,7 +67,10 @@
             <div
               class="absolute left-0 w-px h-full bg-linear-to-b from-white/30 to-transparent"
             />
-            <transition name="lyric-fade" mode="out-in">
+            <transition
+              name="lyric-fade"
+              mode="out-in"
+            >
               <p
                 :key="currentLyric"
                 class="pl-4 text-[11px] text-[#47FFE7] font-serif italic tracking-widest leading-relaxed"
@@ -83,9 +87,7 @@
             />
             <div class="flex flex-col">
               <div class="flex items-baseline gap-2">
-                <span class="text-2xl font-light text-white/90"
-                  >{{ weather.temp }}°</span
-                >
+                <span class="text-2xl font-light text-white/90">{{ weather.temp }}°</span>
                 <span
                   class="text-[9px] text-white/20 uppercase tracking-[0.2em]"
                 >
@@ -105,7 +107,7 @@
                 :title="`${day.date}: ${day.contributionCount} commits`"
                 :class="[
                   'w-2.5 h-2.5 rounded-[2px] transition-all duration-700 hover:scale-125 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]',
-                  getLevelClass(day.contributionLevel),
+                  getLevelClass(day.contributionLevel)
                 ]"
               />
             </template>
@@ -124,7 +126,7 @@
             {{
               contributionData.reduce(
                 (acc, cur) => acc + (cur.contributionCount || 0),
-                0,
+                0
               )
             }}
             Pushes in 48D
@@ -133,112 +135,115 @@
       </div>
     </UCard>
 
-    <div ref="playerDom" class="hidden" />
+    <div
+      ref="playerDom"
+      class="hidden"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 // 全局状态接入
-const playState = usePlayState();
-const playerShow = usePlayerShow();
-const playerVolume = usePlayerVolume();
-const playerData = usePlayerData();
+const playState = usePlayState()
+const playerShow = usePlayerShow()
+const playerVolume = usePlayerVolume()
+const playerData = usePlayerData()
 
 // 本地渲染状态
-const currentLyric = ref("已准备好音乐ヾ(≧▽≦*)o");
-const playerDom = ref<HTMLElement | null>(null);
-const player = ref<any>(null); // APlayer 实例
+const currentLyric = ref('已准备好音乐ヾ(≧▽≦*)o')
+const playerDom = ref<HTMLElement | null>(null)
+const player = ref<any>(null) // APlayer 实例
 
 // 歌曲配置
 const musicConfig = {
-  id: "14353620803",
-  server: "netease",
-  type: "playlist",
-  enable: true,
-};
+  id: '14353620803',
+  server: 'netease',
+  type: 'playlist',
+  enable: true
+}
 
 // --- 获取音乐列表 ---
 const getMusicList = async (
   id: string,
-  server = "netease",
-  type = "playlist",
+  server = 'netease',
+  type = 'playlist'
 ) => {
   const result = await fetch(
-    `https://metingjsapi.vercel.app/api?server=${server}&type=${type}&id=${id}`,
-  );
-  const list = await result.json();
+    `https://metingjsapi.vercel.app/api?server=${server}&type=${type}&id=${id}`
+  )
+  const list = await result.json()
   return list.map((song: any) => ({
     ...song,
-    cover: song.pic,
-  }));
-};
+    cover: song.pic
+  }))
+}
 
 // --- 初始化 APlayer ---
 const initAPlayer = async (list: any[]) => {
-  if (!import.meta.client || !list.length) return;
+  if (!import.meta.client || !list.length) return
 
   try {
-    const module = await import("aplayer");
-    const APlayer = module.default;
+    const module = await import('aplayer')
+    const APlayer = module.default
 
     player.value = new APlayer({
       container: playerDom.value,
       volume: playerVolume.value,
       lrcType: 3,
-      order: "random",
-      audio: list,
-    });
+      order: 'random',
+      audio: list
+    })
 
     // APlayer 事件监听
-    player.value.on("play", () => (playState.value = true));
-    player.value.on("pause", () => (playState.value = false));
+    player.value.on('play', () => (playState.value = true))
+    player.value.on('pause', () => (playState.value = false))
 
     // 歌词提取与元数据同步
-    player.value.on("timeupdate", () => {
+    player.value.on('timeupdate', () => {
       // 1. 抓取歌词
       const lrcActive = playerDom.value?.querySelector(
-        ".aplayer-lrc-current",
-      ) as HTMLElement;
+        '.aplayer-lrc-current'
+      ) as HTMLElement
       if (lrcActive && lrcActive.innerText !== currentLyric.value) {
-        currentLyric.value = lrcActive.innerText;
+        currentLyric.value = lrcActive.innerText
       }
 
       // 2. 检查并同步歌曲名
-      const current = player.value.list.audios[player.value.list.index];
+      const current = player.value.list.audios[player.value.list.index]
       if (current && current.name !== playerData.value.name) {
         playerData.value = {
           name: current.name,
-          artist: current.artist,
-        };
+          artist: current.artist
+        }
         // 更新系统媒体控制
-        initMediaSession(current.name, current.artist);
+        initMediaSession(current.name, current.artist)
       }
-    });
+    })
 
     // 初次同步
-    const initSong = player.value.list.audios[player.value.list.index];
-    playerData.value = { name: initSong.name, artist: initSong.artist };
+    const initSong = player.value.list.audios[player.value.list.index]
+    playerData.value = { name: initSong.name, artist: initSong.artist }
   } catch (error) {
-    console.error("APlayer 挂载失败", error);
+    console.error('APlayer 挂载失败', error)
   }
-};
+}
 
 // --- 初始化系统媒体控制 ---
 const initMediaSession = (title: string, artist: string) => {
-  if ("mediaSession" in navigator) {
-    navigator.mediaSession.metadata = new MediaMetadata({ title, artist });
-    navigator.mediaSession.setActionHandler("play", () => player.value?.play());
-    navigator.mediaSession.setActionHandler("pause", () =>
-      player.value?.pause(),
-    );
-    navigator.mediaSession.setActionHandler("previoustrack", () =>
-      player.value?.skipBack(),
-    );
-    navigator.mediaSession.setActionHandler("nexttrack", () =>
-      player.value?.skipForward(),
-    );
+  if ('mediaSession' in navigator) {
+    navigator.mediaSession.metadata = new MediaMetadata({ title, artist })
+    navigator.mediaSession.setActionHandler('play', () => player.value?.play())
+    navigator.mediaSession.setActionHandler('pause', () =>
+      player.value?.pause()
+    )
+    navigator.mediaSession.setActionHandler('previoustrack', () =>
+      player.value?.skipBack()
+    )
+    navigator.mediaSession.setActionHandler('nexttrack', () =>
+      player.value?.skipForward()
+    )
   }
-};
+}
 
 // --- 加载流程 ---
 const loadMusicData = async () => {
@@ -246,67 +251,67 @@ const loadMusicData = async () => {
     const musicList = await getMusicList(
       musicConfig.id,
       musicConfig.server,
-      musicConfig.type,
-    );
+      musicConfig.type
+    )
 
     // 腾讯音乐修复逻辑
-    if (musicList[1]?.url === "") {
+    if (musicList[1]?.url === '') {
       const midArr = JSON.parse(
-        decodeURIComponent(musicList[0].url.split("data=")[1]),
-      ).req_0.param.songmid;
+        decodeURIComponent(musicList[0].url.split('data=')[1])
+      ).req_0.param.songmid
       musicList.forEach((song: any, index: number) => {
-        song.url = `https://meting.qjqq.cn/?server=tencent&type=url&id=${midArr[index]}`;
-      });
+        song.url = `https://meting.qjqq.cn/?server=tencent&type=url&id=${midArr[index]}`
+      })
     }
 
-    await initAPlayer(musicList);
+    await initAPlayer(musicList)
   } catch (e) {
-    currentLyric.value = "列表加载失败，请检查网络或API接口";
+    currentLyric.value = '列表加载失败，请检查网络或API接口'
   }
-};
+}
 
 // --- 生命周期与监听 ---
-watch(playerVolume, (val) => player.value?.volume(val, true));
+watch(playerVolume, val => player.value?.volume(val, true))
 
 // --- 贡献图逻辑 ---
-const githubUsername = "Glace-Dev";
-const contributionData = ref<any[]>([]);
+const githubUsername = 'Glace-Dev'
+const contributionData = ref<any[]>([])
 
 const getLevelClass = (level: string) => {
   const levels: Record<string, string> = {
-    NONE: "bg-white/5", // 无贡献
-    FIRST_QUARTILE: "bg-emerald-800/60", // 低
-    SECOND_QUARTILE: "bg-emerald-600/70", // 中
-    THIRD_QUARTILE: "bg-emerald-400/80", // 中高
-    FOURTH_QUARTILE: "bg-emerald-300", // 高
-  };
-  return levels[level] || "bg-white/5";
-};
+    NONE: 'bg-white/5', // 无贡献
+    FIRST_QUARTILE: 'bg-emerald-800/60', // 低
+    SECOND_QUARTILE: 'bg-emerald-600/70', // 中
+    THIRD_QUARTILE: 'bg-emerald-400/80', // 中高
+    FOURTH_QUARTILE: 'bg-emerald-300' // 高
+  }
+  return levels[level] || 'bg-white/5'
+}
 
 const fetchContributions = async () => {
   try {
     const res = await fetch(
-      `https://github-contributions-api.deno.dev/${githubUsername}.json`,
-    );
-    const data = await res.json();
+      `https://github-contributions-api.deno.dev/${githubUsername}.json`
+    )
+    const data = await res.json()
 
     // 核心修正：1.展平数组 2.截取最后48个元素
     if (data.contributions) {
-      const allDays = data.contributions.flat();
-      contributionData.value = allDays.slice(-48);
+      const allDays = data.contributions.flat()
+      contributionData.value = allDays.slice(-48)
     }
   } catch (e) {
-    console.error("GitHub 数据加载失败", e);
+    console.error('GitHub 数据加载失败', e)
   }
-};
+}
 
 // --- 天气逻辑 ---
 const weather = ref({
   temp: 0,
-  description: "加载中",
-  city: "定位中",
-  icon: "i-heroicons-sun-20-solid",
-});
+  description: '加载中',
+  city: '定位中',
+  icon: 'i-heroicons-sun-20-solid'
+})
 
 // 1. 增强版天气映射：支持昼夜图标切换
 const weatherMap: Record<number, { text: string, dayIcon: string, nightIcon: string }> = {
@@ -322,47 +327,47 @@ const weatherMap: Record<number, { text: string, dayIcon: string, nightIcon: str
 const fetchWeather = async () => {
   try {
     // A. 直接访问定位 API (支持 CORS)
-    const geoRes = await fetch('https://get.geojs.io/v1/ip/geo.json');
-    const geoData = await geoRes.json();
-    
-    const lat = parseFloat(geoData.latitude);
-    const lon = parseFloat(geoData.longitude);
-    weather.value.city = geoData.city || '未知';
+    const geoRes = await fetch('https://get.geojs.io/v1/ip/geo.json')
+    const geoData = await geoRes.json()
+
+    const lat = parseFloat(geoData.latitude)
+    const lon = parseFloat(geoData.longitude)
+    weather.value.city = geoData.city || '未知'
 
     // B. 直接访问天气 API (根据你提供的 JSON 结构)
     const weatherRes = await fetch(
       `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`
-    );
-    const data = await weatherRes.json();
-    
+    )
+    const data = await weatherRes.json()
+
     if (data.current_weather) {
-      const { temperature, weathercode, is_day } = data.current_weather;
-      
+      const { temperature, weathercode, is_day } = data.current_weather
+
       // 根据 code 获取基础信息
-      const condition = weatherMap[weathercode] || { text: '未知', dayIcon: 'i-heroicons-sun-20-solid', nightIcon: 'i-heroicons-moon-20-solid' };
-      
+      const condition = weatherMap[weathercode] || { text: '未知', dayIcon: 'i-heroicons-sun-20-solid', nightIcon: 'i-heroicons-moon-20-solid' }
+
       // C. 细节：根据昼夜状态切换图标
-      weather.value.temp = Math.round(temperature);
-      weather.value.description = condition.text;
-      weather.value.icon = is_day === 1 ? condition.dayIcon : condition.nightIcon;
+      weather.value.temp = Math.round(temperature)
+      weather.value.description = condition.text
+      weather.value.icon = is_day === 1 ? condition.dayIcon : condition.nightIcon
     }
   } catch (error) {
-    console.error('[Weather Service Error]:', error);
-    weather.value.description = '离线模式';
+    console.error('[Weather Service Error]:', error)
+    weather.value.description = '离线模式'
   }
 }
 
 onMounted(() => {
   if (playerShow.value && musicConfig.enable) {
-    loadMusicData();
+    loadMusicData()
   }
-  fetchContributions(); // 获取 GitHub 数据
-  fetchWeather(); // 获取实时天气
-});
+  fetchContributions() // 获取 GitHub 数据
+  fetchWeather() // 获取实时天气
+})
 
 onBeforeUnmount(() => {
-  player.value?.destroy();
-});
+  player.value?.destroy()
+})
 </script>
 
 <style scoped lang="scss">

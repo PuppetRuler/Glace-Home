@@ -21,7 +21,7 @@ export default defineNuxtConfig({
     fonts: false
   },
   routeRules: {
-    '/': { prerender: true, isr: 3600 * 24 * 7 },
+    '/': { prerender: true, isr: 3600 * 24 * 7 }
   },
   compatibilityDate: '2026-02-15'
 })

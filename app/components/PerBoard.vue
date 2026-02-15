@@ -55,8 +55,8 @@
         <div class="flex w-full justify-around items-center px-4">
           <UButton
             v-for="link in socialLinks"
-            :aria-label="link.icon"
             :key="link.icon"
+            :aria-label="link.icon"
             :icon="link.icon"
             variant="ghost"
             class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 text-white/40 hover:text-white ring-1 ring-white/10 transition-all duration-300 shadow-sm"
