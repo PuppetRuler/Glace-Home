@@ -1,7 +1,7 @@
 <template>
   <div class="w-full max-w-6xl mx-auto pt-8">
     <div
-      class="flex items-center space-x-2 mb-6 px-4 text-zinc-800 dark:text-white/90 transition-colors duration-300"
+      class="flex items-center space-x-2 mb-6 text-zinc-800 dark:text-white/90 transition-colors duration-300"
     >
       <UIcon
         name="i-heroicons-link"
@@ -20,14 +20,13 @@
       <div
         v-for="(page, pIndex) in pages"
         :key="pIndex"
-        class="min-w-full grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 snap-center pb-8"
+        class="min-w-full grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6 snap-center pb-8"
       >
         <div
           v-for="item in page"
           :key="item.name"
           class="relative border-none"
         >
-          <!-- 链接卡片：单一 UCard，根据 item.enable 动态渲染为 <a> 或 <div> 并调整样式 -->
           <component
             :is="item.enable ? 'a' : 'div'"
             v-bind="item.enable ? { href: item.url, target: '_blank', rel: 'noopener noreferrer', class: 'no-underline' } : {}"
@@ -35,8 +34,8 @@
             <UCard
               :disabled="!item.enable"
               :class="item.enable
-                ? 'group available h-32 cursor-pointer transition-all duration-300 rounded-2xl bg-background/50 backdrop-blur-sm dark:shadow-[inset_2px_2px_2px_0_rgba(255,255,255,0.2),2px_2px_2px_0_rgba(0,0,0,0.2)] shadow-[inset_2_2px_2px_0_rgba(0,0,0,0.2),2px_2px_2px_0_rgba(255,255,255,0.2)] ring-0 transform hover:-translate-y-1 hover:-translate-x-1 text-center'
-                : 'group card-unavailable relative h-32 cursor-not-allowed transition-all duration-300 rounded-2xl bg-background/50 backdrop-blur-sm dark:shadow-[inset_2px_2px_2px_0_rgba(255,255,255,0.2),2px_2px_2px_0_rgba(0,0,0,0.2)] shadow-[inset_2_2px_2px_0_rgba(0,0,0,0.2),2px_2px_2px_0_rgba(255,255,255,0.2)] ring-0 text-center'"
+                ? 'group available h-32 cursor-pointer transition-all duration-300 rounded-2xl bg-background/50 backdrop-blur-sm dark:shadow-[inset_2px_2px_2px_0_rgba(255,255,255,0.2),2px_2px_2px_0_rgba(0,0,0,0.2)] shadow-[inset_2px_2px_2px_0_rgba(0,0,0,0.2),2px_2px_2px_0_rgba(255,255,255,0.2)] ring-0 transform hover:-translate-y-1 hover:-translate-x-1 text-center'
+                : 'group card-unavailable relative h-32 cursor-not-allowed transition-all duration-300 rounded-2xl bg-background/50 backdrop-blur-sm dark:shadow-[inset_2px_2px_2px_0_rgba(255,255,255,0.2),2px_2px_2px_0_rgba(0,0,0,0.2)] shadow-[inset_2px_2px_2px_0_rgba(0,0,0,0.2),2px_2px_2px_0_rgba(255,255,255,0.2)] ring-0 text-center'"
               :ui="{
                 root: 'relative overflow-hidden',
                 body: 'flex flex-col items-center justify-center gap-2'
@@ -50,6 +49,7 @@
                   class="absolute -top-[50%] -right-[50%] w-full h-full bg-linear-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl"
                 />
               </div>
+
               <UIcon
                 :name="item.icon"
                 class="w-10 h-10 transition-colors duration-300 text-zinc-800 dark:text-white"
@@ -59,9 +59,10 @@
               >
                 {{ item.name }}
               </span>
+
               <div
                 v-if="!item.enable"
-                class="card-badge absolute top-3 right-3 text-xs rounded-full px-2 py-0.5 bg-white/10 text-white/80 opacity-0 transition-opacity duration-200 pointer-events-none"
+                class="card-badge absolute top-3 right-3 text-xs rounded-full px-2 py-0.5 bg-zinc-800/10 dark:bg-white/10 text-zinc-800/80 dark:text-white/80 opacity-0 transition-opacity duration-200 pointer-events-none"
               >
                 暂不可用
               </div>
@@ -76,7 +77,7 @@
         v-for="(_, idx) in pages"
         :key="idx"
         class="h-1.5 rounded-full transition-all duration-300"
-        :class="activeIndex === idx ? 'w-8 bg-white' : 'w-4 bg-white/20'"
+        :class="activeIndex === idx ? 'w-8 bg-zinc-800 dark:bg-white' : 'w-4 bg-zinc-800/20 dark:bg-white/20'"
         @click="scrollToPage(idx)"
       />
     </div>

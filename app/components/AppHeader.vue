@@ -33,7 +33,8 @@
 
 <script setup lang="ts"></script>
 
-<style lang="sass">
-button[aria-label="Open menu"]
-  display: none
+<style lang="scss">
+button[aria-label="Open menu"] {
+  display: none;
+}
 </style>

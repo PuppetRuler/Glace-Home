@@ -21,5 +21,3 @@ useSeoMeta({
   twitterCard: 'summary_large_image'
 })
 </script>
-
-<style></style>

@@ -350,17 +350,18 @@ onBeforeUnmount(() => {
 })
 </script>
 
-<style scoped>
-/* 歌词平滑切换 */
+<style scoped lang="scss">
 .lyric-fade-enter-active,
 .lyric-fade-leave-active {
   transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 .lyric-fade-enter-from {
   opacity: 0;
   transform: translateY(8px);
   filter: blur(4px);
 }
+
 .lyric-fade-leave-to {
   opacity: 0;
   transform: translateY(-8px);

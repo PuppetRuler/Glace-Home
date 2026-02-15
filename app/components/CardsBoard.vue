@@ -23,17 +23,17 @@
             </div>
           </div>
           <div
-            class="ml-4 rounded-full shadow-[inset_0_0_10px_rgba(0,0,0,0.5)] flex-4 flex h-full items-center justify-center px-4"
+            class="ml-4 rounded-full shadow-[inset_0_0_10px_rgba(0,0,0,0.5)] flex-4 flex h-full items-center justify-center"
           >
             <div class="flex items-center justify-center w-full">
               <Transition
                 name="fade"
                 mode="out-in"
               >
-                <div
+                <USkeleton
                   v-if="!sentence"
                   key="skeleton"
-                  class="skeleton w-48 h-5 rounded-md opacity-50"
+                  class="skeleton h-4 w-48 rounded-md opacity-50"
                 />
 
                 <p
@@ -114,10 +114,28 @@ onUnmounted(() => {
 })
 </script>
 
-<style scoped lang="sass">
-.fade-enter-active, .fade-leave-active
-  transition: opacity 0.2s ease
+<style scoped lang="scss">
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.2s ease;
+}
 
-.fade-enter-from, .fade-leave-to
-  opacity: 0
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.06) 25%, rgba(0, 0, 0, 0.02) 37%, rgba(0, 0, 0, 0.06) 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.2s ease-in-out infinite;
+  border-radius: inherit;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
 </style>

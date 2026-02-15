@@ -75,11 +75,17 @@ const socialLinks = [
 ]
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 /* 涟漪动画保持 */
 @keyframes water-ripple {
-  0% { transform: scale(1); opacity: 0.8; }
-  100% { transform: scale(4.2); opacity: 0; }
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(4.2);
+    opacity: 0;
+  }
 }
 
 .animate-water-ripple {
