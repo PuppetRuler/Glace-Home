@@ -20,7 +20,7 @@
       <div
         v-for="(page, pIndex) in pages"
         :key="pIndex"
-        class="min-w-full grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6 snap-center pb-8"
+        class="min-w-full grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6 snap-center"
       >
         <div
           v-for="item in page"
